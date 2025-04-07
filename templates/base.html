@@ -1,0 +1,330 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ConsultPro - Consultoría Empresarial{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="ConsultPro Logo">
+                    <span>ConsultPro</span>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                    <li><a href="{{ url_for('services') }}">Servicios</a></li>
+                    <li><a href="{{ url_for('about') }}">Nosotros</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contacto</a></li>
+                    {% if session.get('logged_in') %}
+                        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}" class="btn-login">Iniciar Sesión</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h3>Sobre ConsultPro</h3>
+                    <p>Somos una empresa líder en consultoría empresarial con más de 10 años de experiencia ayudando a organizaciones a alcanzar su máximo potencial.</p>
+                </div>
+                <div class="footer-section links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                        <li><a href="{{ url_for('services') }}">Servicios</a></li>
+                        <li><a href="{{ url_for('about') }}">Nosotros</a></li>
+                        <li><a href="{{ url_for('contact') }}">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Principal 123, Ciudad</p>
+                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@consultpro.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ConsultPro. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
+
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Transformamos negocios para impulsar su crecimiento</h1>
+            <p>Soluciones de consultoría personalizadas para optimizar el rendimiento y maximizar resultados.</p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('services') }}" class="btn btn-primary">Nuestros Servicios</a>
+                <a href="{{ url_for('contact') }}" class="btn btn-secondary">Contáctanos</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="services-preview">
+    <div class="container">
+        <h2>Nuestros Servicios</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Consultoría Estratégica</h3>
+                <p>Definimos la dirección de tu empresa para alcanzar tus objetivos de negocio.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-laptop-code"></i>
+                <h3>Transformación Digital</h3>
+                <p>Implementamos tecnologías para optimizar y digitalizar tu negocio.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-tasks"></i>
+                <h3>Gestión de Proyectos</h3>
+                <p>Planificamos y ejecutamos proyectos para garantizar resultados exitosos.</p>
+            </div>
+        </div>
+        <div class="services-link">
+            <a href="{{ url_for('services') }}" class="btn btn-outline">Ver todos los servicios</a>
+        </div>
+    </div>
+</section>
+
+<section class="why-us">
+    <div class="container">
+        <h2>¿Por qué elegirnos?</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <i class="fas fa-user-tie"></i>
+                <h3>Equipo Experimentado</h3>
+                <p>Consultores con más de 15 años de experiencia en diversos sectores.</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-handshake"></i>
+                <h3>Enfoque Personalizado</h3>
+                <p>Soluciones adaptadas específicamente a las necesidades de tu empresa.</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-chart-bar"></i>
+                <h3>Resultados Medibles</h3>
+                <p>Nos enfocamos en entregar resultados tangibles y cuantificables.</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-globe"></i>
+                <h3>Alcance Global</h3>
+                <p>Experiencia en proyectos internacionales y conocimiento de mercados globales.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <h2>Lo que dicen nuestros clientes</h2>
+        <div class="testimonial-slider">
+            <div class="testimonial">
+                <p class="quote">"ConsultPro transformó completamente nuestra estrategia de negocio, lo que resultó en un aumento del 32% en nuestras ventas anuales."</p>
+                <div class="client">
+                    <div class="client-info">
+                        <h4>Juan Pérez</h4>
+                        <p>Director General, Empresa ABC</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <p class="quote">"El proyecto de transformación digital que implementaron superó todas nuestras expectativas. Ahora somos mucho más eficientes."</p>
+                <div class="client">
+                    <div class="client-info">
+                        <h4>María González</h4>
+                        <p>CEO, Corporación XYZ</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <p class="quote">"Su equipo de consultoría supo identificar exactamente lo que necesitábamos para mejorar nuestros procesos internos."</p>
+                <div class="client">
+                    <div class="client-info">
+                        <h4>Carlos Rodríguez</h4>
+                        <p>Director de Operaciones, Industrias DEF</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>¿Listo para transformar tu negocio?</h2>
+        <p>Contáctanos hoy mismo para una consulta inicial gratuita.</p>
+        <a href="{{ url_for('contact') }}" class="btn btn-primary">Comenzar Ahora</a>
+    </div>
+</section>
+{% endblock %}
+
+<!-- templates/services.html -->
+{% extends 'base.html' %}
+
+{% block title %}Servicios - ConsultPro{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Nuestros Servicios</h1>
+        <p>Soluciones completas para impulsar el crecimiento de tu empresa</p>
+    </div>
+</section>
+
+<section class="services-section">
+    <div class="container">
+        <div class="services-list">
+            {% for service in services %}
+            <div class="service-item">
+                <div class="service-image">
+                    <img src="{{ url_for('static', filename='img/' + service[4]) }}" alt="{{ service[1] }}">
+                </div>
+                <div class="service-content">
+                    <h2>{{ service[1] }}</h2>
+                    <p>{{ service[2] }}</p>
+                    <div class="service-price">
+                        <span>Desde {{ service[3] }}€</span>
+                    </div>
+                    <a href="{{ url_for('contact') }}" class="btn btn-secondary">Solicitar información</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="process">
+    <div class="container">
+        <h2>Nuestro Proceso</h2>
+        <div class="process-steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Consulta Inicial</h3>
+                <p>Analizamos tus necesidades y objetivos para entender tu situación actual.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Diagnóstico</h3>
+                <p>Evaluamos en profundidad tu empresa para identificar oportunidades de mejora.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Propuesta</h3>
+                <p>Desarrollamos un plan personalizado con soluciones específicas.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Implementación</h3>
+                <p>Ejecutamos las estrategias diseñadas con un enfoque metódico.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <h3>Seguimiento</h3>
+                <p>Monitoreamos los resultados y ajustamos según sea necesario.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>¿Necesitas un servicio personalizado?</h2>
+        <p>Contáctanos para discutir cómo podemos adaptarnos a tus necesidades específicas.</p>
+        <a href="{{ url_for('contact') }}" class="btn btn-primary">Hablar con un consultor</a>
+    </div>
+</section>
+{% endblock %}
+
+<!-- templates/about.html -->
+{% extends 'base.html' %}
+
+{% block title %}Sobre Nosotros - ConsultPro{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Sobre Nosotros</h1>
+        <p>Conoce nuestra historia, misión y equipo</p>
+    </div>
+</section>
+
+<section class="about-intro">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Nuestra Historia</h2>
+                <p>ConsultPro nació en 2010 con una visión clara: ayudar a las empresas a alcanzar su máximo potencial a través de estrategias innovadoras y soluciones personalizadas.</p>
+                <p>Con más de una década de experiencia, hemos trabajado con empresas de todos los tamaños y sectores, desde startups emergentes hasta grandes corporaciones. Nuestra trayectoria nos ha permitido desarrollar metodologías probadas y efectivas que garantizan resultados.</p>
+                <p>Hoy, ContultPro es reconocida como una firma líder en consultoría empresarial, con un equipo de más de 50 consultores expertos y presencia en 5 países.</p>
+            </div>
+            <div class="about-image">
+                <img src="{{ url_for('static', filename='img/about-image.jpg') }}" alt="Equipo ConsultPro">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mission-vision">
+    <div class="container">
+        <div class="mission">
+            <h2>Nuestra Misión</h2>
+            <p>Impulsar el crecimiento y la transformación de las empresas a través de soluciones innovadoras y personalizadas que generen valor real y sostenible.</p>
+        </div>
+        <div class="vision">
+            <h2>Nuestra Visión</h2>
+            <p>Ser la firma de consultoría de referencia por nuestra capacidad para anticipar tendencias, innovar constantemente y entregar resultados excepcionales.</p>
+        </div>
+        <div class="values">
+            <h2>Nuestros Valores</h2>
+            <ul>
+                <li><strong>Excelencia:</strong> Buscamos la perfección en todo lo que hacemos.</li>
+                <li><strong>Integridad:</strong> Actuamos con honestidad y ética en todas nuestras relaciones.</li>
+                <li><strong>Innovación:</strong> Nos adaptamos y anticipamos a los cambios del mercado.</li>
+                <li><strong>Compromiso:</strong> Nos involucramos completamente con los objetivos de nuestros clientes.</li>
+                <li><strong>Colaboración:</strong> Trabajamos en equipo para lograr resultados extraordinarios.</li>
+            </ul>
+        

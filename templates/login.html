@@ -1,0 +1,105 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - ConsultPro{% endblock %}
+
+{% block content %}
+<section class="dashboard-section">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+            <p>Bienvenido, {{ session.name }}. Aquí tienes un resumen de la actividad.</p>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <h3 data-target="{{ clients_count }}">{{ clients_count }}</h3>
+                <p>Clientes Totales</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-project-diagram"></i>
+                <h3 data-target="{{ projects_count }}">{{ projects_count }}</h3>
+                <p>Proyectos</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-tasks"></i>
+                <h3 data-target="32">32</h3>
+                <p>Tareas Activas</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <h3 data-target="89">89</h3>
+                <p>% Completado</p>
+            </div>
+        </div>
+        
+        <div class="recent-projects">
+            <h2>Proyectos Recientes</h2>
+            <table class="projects-table">
+                <thead>
+                    <tr>
+                        <th>Proyecto</th>
+                        <th>Cliente</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in recent_projects %}
+                    <tr>
+                        <td>{{ project[0] }}</td>
+                        <td>{{ project[2] }}</td>
+                        <td>{{ project[1] }}</td>
+                        <td>
+                            {% if project[3] == 'pendiente' %}
+                            <span class="project-status status-pending">Pendiente</span>
+                            {% elif project[3] == 'en_progreso' %}
+                            <span class="project-status status-progress">En Progreso</span>
+                            {% else %}
+                            <span class="project-status status-completed">Completado</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+{% block extra_scripts %}
+<script>
+    // Asegurarse de que las animaciones de estadísticas se inicien
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            // Iniciar animación después de un breve retraso
+            const statCards = document.querySelectorAll('.stat-card h3');
+            
+            statCards.forEach(card => {
+                const target = parseInt(card.getAttribute('data-target'));
+                if (target) {
+                    let count = 0;
+                    const duration = 2000; // 2 segundos
+                    const frameDuration = 16; // ~60fps
+                    const increment = target / (duration / frameDuration);
+                    
+                    const counter = setInterval(() => {
+                        count += increment;
+                        if (count >= target) {
+                            card.textContent = target;
+                            clearInterval(counter);
+                        } else {
+                            card.textContent = Math.floor(count);
+                        }
+                    }, frameDuration);
+                }
+            });
+        }, 500);
+    });
+</script>
+{% endblock %}
+{% endblock %}
